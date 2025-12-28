@@ -1,5 +1,5 @@
-# Use the official PHP image with Apache
-FROM php:8.1-cli
+# Use the official PHP image with CLI
+FROM php:8.4-cli
 
 # Set working directory
 WORKDIR /var/www/html
@@ -29,9 +29,6 @@ COPY --chown=www-data:www-data . /var/www/html
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
-
-# Generate application key
-RUN php artisan key:generate
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
