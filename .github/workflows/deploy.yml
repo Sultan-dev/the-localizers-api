@@ -1,0 +1,14 @@
+name: Prepare Code
+
+on:
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    prepare:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
