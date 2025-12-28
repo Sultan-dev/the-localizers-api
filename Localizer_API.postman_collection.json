@@ -1,0 +1,590 @@
+{
+	"info": {
+		"_postman_id": "localizer-api-collection",
+		"name": "Localizer API",
+		"description": "Postman collection for Localizer API Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						},
+						"description": "تسجيل الدخول للمسؤولين فقط"
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.token) {",
+									"        pm.collectionVariables.set('auth_token', jsonData.token);",
+									"        console.log('Token saved successfully');",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						},
+						"description": "الحصول على معلومات المستخدم الحالي"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"logout"
+							]
+						},
+						"description": "تسجيل الخروج"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints"
+		},
+		{
+			"name": "Cards",
+			"item": [
+				{
+					"name": "Get All Cards (Public)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards"
+							]
+						},
+						"description": "الحصول على جميع الكروت النشطة (عام)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Card",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"عنوان الكارد\",\n    \"subtitle\": \"عنوان فرعي\",\n    \"description\": \"وصف الكارد\",\n    \"link\": \"https://example.com\",\n    \"badge\": \"جديد\",\n    \"preview_url\": \"https://example.com/preview.jpg\",\n    \"is_coming_soon\": false,\n    \"order\": 1,\n    \"is_active\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards"
+							]
+						},
+						"description": "إنشاء كارد جديد (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Card by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Card ID"
+								}
+							]
+						},
+						"description": "الحصول على كارد محدد (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Card",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"عنوان الكارد المحدث\",\n    \"subtitle\": \"عنوان فرعي محدث\",\n    \"description\": \"وصف محدث\",\n    \"link\": \"https://example.com/updated\",\n    \"badge\": \"محدث\",\n    \"preview_url\": \"https://example.com/preview-updated.jpg\",\n    \"is_coming_soon\": false,\n    \"order\": 2,\n    \"is_active\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Card ID"
+								}
+							]
+						},
+						"description": "تحديث كارد (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Card",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Card ID"
+								}
+							]
+						},
+						"description": "حذف كارد (Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Cards management endpoints"
+		},
+		{
+			"name": "Reviews/Ratings",
+			"item": [
+				{
+					"name": "Get All Reviews",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/legislations?rate=5&min_rate=4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"legislations"
+							],
+							"query": [
+								{
+									"key": "rate",
+									"value": "5",
+									"description": "تصفية حسب التقييم المحدد (1-5)",
+									"disabled": true
+								},
+								{
+									"key": "min_rate",
+									"value": "4",
+									"description": "تصفية حسب الحد الأدنى للتقييم",
+									"disabled": true
+								}
+							]
+						},
+						"description": "الحصول على جميع التقييمات مع إمكانية التصفية حسب التقييم (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"أحمد محمد\",\n    \"email\": \"ahmed@example.com\",\n    \"rate\": 5,\n    \"review\": \"خدمة ممتازة وسريعة، أنصح الجميع بالاستفادة منها\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/legislations",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"legislations"
+							]
+						},
+						"description": "إنشاء تقييم جديد (Admin only)\n\nrate: من 1 إلى 5 (مطلوب)\nname: اسم الشخص (مطلوب)\nemail: البريد الإلكتروني (اختياري)\nreview: التعليق (مطلوب)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Review by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/legislations/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"legislations",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Review ID"
+								}
+							]
+						},
+						"description": "الحصول على تقييم محدد (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"أحمد محمد\",\n    \"email\": \"ahmed@example.com\",\n    \"rate\": 4,\n    \"review\": \"تقييم محدث - خدمة جيدة جداً\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/legislations/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"legislations",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Review ID"
+								}
+							]
+						},
+						"description": "تحديث تقييم (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/legislations/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"legislations",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Review ID"
+								}
+							]
+						},
+						"description": "حذف تقييم (Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Reviews/Ratings management endpoints"
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
+
