@@ -34,8 +34,8 @@ return [
         ],
     ],
 
-    'migrations' => [
-        'table' => 'migrations',
-        'update_date_on_publish' => true,
-    ],
+    // Laravel expects this to be a string table name; using an array here
+    // causes Schema::hasTable() to receive an array and crash with
+    // "Array to string conversion" during migrations.
+    'migrations' => 'migrations',
 ];
