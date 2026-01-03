@@ -39,4 +39,4 @@ RUN chown -R www-data:www-data /var/www/html \
 EXPOSE 8080
 
 # Start the application
-CMD ["php", "artisan", "config:clear", "&&", "php", "artisan", "cache:clear", "&&", "php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+CMD ["sh", "-c", "php artisan config:clear && php artisan cache:clear && php artisan serve --host=0.0.0.0 --port=8080"]
