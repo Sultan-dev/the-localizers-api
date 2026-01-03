@@ -30,10 +30,16 @@ COPY --chown=www-data:www-data . /var/www/html
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
+# Create Laravel storage directories
+RUN mkdir -p storage/framework/sessions \
+    && mkdir -p storage/framework/views \
+    && mkdir -p storage/framework/cache \
+    && mkdir -p storage/logs
+
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+    && chmod -R 775 /var/www/html/storage \
+    && chmod -R 775 /var/www/html/bootstrap/cache
 
 # Expose port 8080 for Cloud Run
 EXPOSE 8080
