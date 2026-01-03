@@ -38,10 +38,5 @@ RUN chown -R www-data:www-data /var/www/html \
 # Expose port 8080 for Cloud Run
 EXPOSE 8080
 
-# Clear & cache Laravel config
-RUN php artisan config:clear \
- && php artisan cache:clear \
- && php artisan config:cache
-
 # Start the application
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+CMD ["php", "artisan", "config:clear", "&&", "php", "artisan", "cache:clear", "&&", "php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
