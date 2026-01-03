@@ -14,6 +14,10 @@ return [
     'http://192.168.1.129:5173',
     'https://ai.thelocalizers.com',
     'https://dashboard.thelocalizers.com',
+    'http://34.1.49.37',
+    'https://34.1.49.37',
+    'http://34.1.58.158',
+    'https://34.1.58.158',
   ],
 
   'allowed_origins_patterns' => [
