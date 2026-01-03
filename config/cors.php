@@ -12,6 +12,8 @@ return [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
     'http://192.168.1.129:5173',
+    'https://ai.thelocalizers.com',
+    'https://dashboard.thelocalizers.com',
   ],
 
   'allowed_origins_patterns' => [
