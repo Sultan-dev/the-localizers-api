@@ -7,9 +7,11 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 class Kernel extends HttpKernel
 {
     protected $middlewareGroups = [
-          'web' => [
-        \Illuminate\Cookie\Middleware\EncryptCookies::class,
-        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki    are        \Illuminate\Cauth' => \App\Http\Middleware\Authenticate::class,
+        'web' => [
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+        ],
+        'auth' => \App\Http\Middleware\Authenticate::class,
         'admin' => \App\Http\Middleware\AuthenticateAdmin::class,
     ];
 }
