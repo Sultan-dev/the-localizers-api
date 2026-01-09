@@ -6,22 +6,10 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
 {
-    protected $middleware = [
-        \Illuminate\Http\Middleware\HandleCors::class,
-    ];
-
     protected $middlewareGroups = [
-        'api' => [
-            \Illuminate\Http\Middleware\HandleCors::class,
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        ],
-    ];
-
-    protected $middlewareAliases = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
+          'web' => [
+        \Illuminate\Cookie\Middleware\EncryptCookies::class,
+        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki        \Illuminate\Cooki    are        \Illuminate\Cauth' => \App\Http\Middleware\Authenticate::class,
         'admin' => \App\Http\Middleware\AuthenticateAdmin::class,
     ];
 }
-
