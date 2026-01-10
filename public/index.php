@@ -32,9 +32,11 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
 
 require __DIR__.'/../vendor/autoload.php';
 
-// Quick CORS preflight handling (development convenience)
-// Return Access-Control-Allow-* for OPTIONS requests before booting the framework
+// CORS handling - Only set ONE header
 $allowed_origins = [
+    'https://ai.thelocalizers.com',
+    'https://www.thelocalizers.com',
+    'https://dashboard.thelocalizers.com',
     'http://localhost:5173',
     'http://localhost:5174',
     'http://localhost:3000',
@@ -43,12 +45,14 @@ $allowed_origins = [
     'http://127.0.0.1:3000',
 ];
 
-$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null);
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
+
+// Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     if ($origin && in_array($origin, $allowed_origins)) {
         header('Access-Control-Allow-Origin: ' . $origin);
     } else {
-        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Origin: https://ai.thelocalizers.com'); // Default to main domain
     }
     header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin');
@@ -58,20 +62,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// Set CORS headers for all responses in development (ensures errors still return CORS headers)
-if (isset($origin)) {
-    if (in_array($origin, $allowed_origins)) {
-        header('Access-Control-Allow-Origin: ' . $origin);
-    } else {
-        header('Access-Control-Allow-Origin: *');
-    }
+// Set CORS headers for actual requests (NOT both * and specific origin)
+if ($origin && in_array($origin, $allowed_origins)) {
+    header('Access-Control-Allow-Origin: ' . $origin);
 } else {
-    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Origin: https://ai.thelocalizers.com');
 }
 header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin');
 header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Max-Age: 3600');
 
 /*
 |--------------------------------------------------------------------------
