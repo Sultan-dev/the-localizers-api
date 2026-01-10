@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Admin routes
     Route::middleware('admin')->group(function () {
+        Route::get('/cards/all', [CardController::class, 'getAllCards']); // Must come BEFORE apiResource
         // Cards management
         Route::apiResource('cards', CardController::class)->except(['index']);
 

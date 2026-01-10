@@ -106,5 +106,13 @@ class CardController extends Controller
 
         return response()->json(['message' => 'تم حذف الكارد بنجاح']);
     }
+
+    public function getAllCards(): JsonResponse
+    {
+        $cards = Card::orderBy('order')
+            ->get();
+
+        return response()->json($cards);
+    }
 }
 
