@@ -6,6 +6,10 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
 {
+    protected $middleware = [
+        \Illuminate\Http\Middleware\HandleCors::class,
+    ];
+
     protected $middlewareGroups = [
         'web' => [
             \Illuminate\Cookie\Middleware\EncryptCookies::class,
@@ -16,7 +20,6 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         'api' => [
-            \App\Http\Middleware\CorsMiddleware::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
