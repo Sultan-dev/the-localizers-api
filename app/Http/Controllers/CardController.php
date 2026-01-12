@@ -12,7 +12,7 @@ class CardController extends Controller
     public function index()
     {
         $cards = Card::where('is_active', true)
-            ->orderByRaw('link IS NOT NULL DESC, created_at ASC')
+            ->orderByRaw('NULLIF(link, "") IS NOT NULL DESC, created_at ASC')
             ->get();
 
         return response()->json($cards);
