@@ -9,16 +9,16 @@ use Illuminate\Validation\Rule;
 
 class CardController extends Controller
 {
-    public function index(): JsonResponse
+    public function index()
     {
         $cards = Card::where('is_active', true)
-            ->orderBy('order')
+            ->orderByRaw('link IS NOT NULL DESC, created_at ASC')
             ->get();
 
         return response()->json($cards);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -27,16 +27,16 @@ class CardController extends Controller
             'link' => 'nullable|url|max:255',
             'badge' => 'nullable|string|max:255',
             // accept either a URL or an uploaded file
-             'preview_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'type' => 'required|in:government,company',
+             'preview_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'type' => 'required|in:government,company,all',
             'is_coming_soon' => 'boolean',
             'order' => 'integer|min:0',
             'is_active' => 'boolean',
         ]);
 
         // if an image file was uploaded, move it to public/storage/cards and set preview_url
-        if ($request->hasFile('preview_url')) {
-            $file = $request->file('preview_url');
+        if ($request->hasFile('preview_image')) {
+            $file = $request->file('preview_image');
             $ext = $file->getClientOriginalExtension() ?: 'jpg';
             $filename = uniqid('card_') . '.' . $ext;
             $destination = public_path('storage/cards');
@@ -52,13 +52,16 @@ class CardController extends Controller
         return response()->json($card, 201);
     }
 
-    public function show(Card $card): JsonResponse
+    public function show($id)
     {
+        $card = Card::findOrFail($id);
         return response()->json($card);
     }
 
-    public function update(Request $request, Card $card): JsonResponse
+    public function update(Request $request, $id)
     {
+ 
+        $card = Card::findOrFail($id);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'subtitle' => 'nullable|string|max:255',
@@ -67,7 +70,7 @@ class CardController extends Controller
             'badge' => 'nullable|string|max:255',
             'preview_url' => 'nullable|url|max:255',
             'preview_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'type' => 'required|in:government,company',
+            'type' => 'required|in:government,company,all',
             'is_coming_soon' => 'boolean',
             'order' => 'integer|min:0',
             'is_active' => 'boolean',
@@ -100,19 +103,12 @@ class CardController extends Controller
         return response()->json($card);
     }
 
-    public function destroy(Card $card): JsonResponse
+    public function destroy($id)   
     {
+        $card = Card::findOrFail($id);
         $card->delete();
 
         return response()->json(['message' => 'تم حذف الكارد بنجاح']);
-    }
-
-    public function getAllCards(): JsonResponse
-    {
-        $cards = Card::orderBy('order')
-            ->get();
-
-        return response()->json($cards);
     }
 }
 
