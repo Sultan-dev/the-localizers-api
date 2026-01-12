@@ -16,9 +16,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Admin routes
     Route::middleware('admin')->group(function () {
-        Route::get('/cards/all', [CardController::class, 'getAllCards']); // Must come BEFORE apiResource
         // Cards management
-        Route::apiResource('cards', CardController::class)->except(['index']);
+        Route::get('/cards/{id}', [CardController::class, 'show']);
+        Route::post('/cards', [CardController::class, 'store']);
+        Route::post('/cards/{id}', [CardController::class, 'update']);
+        Route::delete('/cards/{id}', [CardController::class, 'destroy']);
 
         // Legislations management
         Route::apiResource('legislations', LegislationController::class);
