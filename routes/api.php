@@ -4,9 +4,22 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\LegislationController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 // Public routes
 Route::get('/cards', [CardController::class, 'index']);
+
+// Storage file serving route (fallback if public/storage symlink doesn't exist)
+Route::get('/storage/{path}', function ($path) {
+    $fullPath = public_path('storage/' . $path);
+    
+    if (!file_exists($fullPath)) {
+        return response()->json(['error' => 'File not found'], 404);
+    }
+    
+    return response()->file($fullPath);
+})->where('path', '.*');
 
 // Auth routes
 Route::post('/login', [AuthController::class, 'login']);
