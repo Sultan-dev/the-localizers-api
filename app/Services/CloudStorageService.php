@@ -54,12 +54,11 @@ class CloudStorageService
             $filename = $this->generateFileName($file);
             $path = "{$folder}/{$filename}";
 
-            // Upload to GCS with public read access
+            // Upload to GCS (bucket-level access controls apply)
             $object = $this->bucket->upload(
                 fopen($file->getRealPath(), 'r'),
                 [
                     'name' => $path,
-                    'predefinedAcl' => 'publicRead',
                     'metadata' => [
                         'uploadedAt' => date('Y-m-d H:i:s'),
                         'originalName' => $file->getClientOriginalName(),
@@ -68,7 +67,7 @@ class CloudStorageService
                 ]
             );
 
-            // Use public URL directly (no signed URL needed)
+            // Use public URL directly
             $publicUrl = $this->getPublicUrl($path);
 
             return [
