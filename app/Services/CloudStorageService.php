@@ -54,7 +54,7 @@ class CloudStorageService
             $filename = $this->generateFileName($file);
             $path = "{$folder}/{$filename}";
 
-            // Upload to GCS (bucket-level access controls apply)
+            // Upload to GCS with cache control metadata
             $object = $this->bucket->upload(
                 fopen($file->getRealPath(), 'r'),
                 [
@@ -62,19 +62,23 @@ class CloudStorageService
                     'metadata' => [
                         'uploadedAt' => date('Y-m-d H:i:s'),
                         'originalName' => $file->getClientOriginalName(),
+                        'firebaseStorageDownloadTokens' => uniqid(),
+                    ],
+                    'metadata' => [
+                        'cacheControl' => 'public, max-age=31536000, immutable',
                         'contentType' => $file->getMimeType(),
                     ],
                 ]
             );
 
-            // Use public URL directly
-            $publicUrl = $this->getPublicUrl($path);
+            // Generate V4 signed URL (valid for 7 days)
+            $signedUrl = $this->getSignedUrl($path, 7 * 24 * 60 * 60);
 
             return [
-                'url' => $publicUrl,
+                'url' => $signedUrl,
                 'path' => $path,
                 'filename' => $filename,
-                'public_url' => $publicUrl,
+                'public_url' => $signedUrl,
             ];
         } catch (Exception $e) {
             \Log::error('File upload error: ' . $e->getMessage());
@@ -108,7 +112,7 @@ class CloudStorageService
     }
 
     /**
-     * Get a signed URL for a file
+     * Get a V4 signed URL for a file
      *
      * @param string $path The file path in GCS
      * @param int $duration Duration in seconds
@@ -119,7 +123,11 @@ class CloudStorageService
         try {
             $object = $this->bucket->object($path);
             $signedUrl = $object->signedUrl(
-                new \DateTime('+' . $duration . ' seconds')
+                new \DateTimeImmutable('+' . $duration . ' seconds'),
+                [
+                    'version' => 'v4',
+                    'method' => 'GET',
+                ]
             );
 
             return $signedUrl;
