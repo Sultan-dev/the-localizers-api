@@ -34,7 +34,7 @@ CREATE TABLE `cards` (
   `description` text DEFAULT NULL,
   `link` varchar(255) DEFAULT NULL,
   `badge` varchar(255) DEFAULT NULL,
-  `preview_url` varchar(255) DEFAULT NULL,
+  `preview_url` text DEFAULT NULL,
   `type` enum('government','company','all') NOT NULL DEFAULT 'government',
   `is_coming_soon` tinyint(1) NOT NULL DEFAULT 0,
   `order` int(11) NOT NULL DEFAULT 0,
