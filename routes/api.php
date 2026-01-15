@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\LegislationController;
+use App\Http\Controllers\StorageController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -35,8 +36,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/cards/{id}', [CardController::class, 'update']);
         Route::delete('/cards/{id}', [CardController::class, 'destroy']);
 
+        // Cloud Storage management
+        Route::prefix('storage')->group(function () {
+            Route::get('/cards/list', [StorageController::class, 'listCardImages']);
+            Route::post('/signed-url', [StorageController::class, 'getSignedUrl']);
+            Route::post('/delete', [StorageController::class, 'deleteImage']);
+            Route::post('/info', [StorageController::class, 'getImageInfo']);
+        });
+
         // Legislations management
         Route::apiResource('legislations', LegislationController::class);
     });
 });
+
 
