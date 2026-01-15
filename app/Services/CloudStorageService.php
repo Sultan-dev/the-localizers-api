@@ -54,26 +54,28 @@ class CloudStorageService
             $filename = $this->generateFileName($file);
             $path = "{$folder}/{$filename}";
 
-            // Upload to GCS
+            // Upload to GCS with public read access
             $object = $this->bucket->upload(
                 fopen($file->getRealPath(), 'r'),
                 [
                     'name' => $path,
+                    'predefinedAcl' => 'publicRead',
                     'metadata' => [
                         'uploadedAt' => date('Y-m-d H:i:s'),
                         'originalName' => $file->getClientOriginalName(),
+                        'contentType' => $file->getMimeType(),
                     ],
                 ]
             );
 
-            // Generate signed URL (valid for 7 days)
-            $signedUrl = $this->getSignedUrl($path, 7 * 24 * 60 * 60);
+            // Use public URL directly (no signed URL needed)
+            $publicUrl = $this->getPublicUrl($path);
 
             return [
-                'url' => $signedUrl,
+                'url' => $publicUrl,
                 'path' => $path,
                 'filename' => $filename,
-                'public_url' => $this->getPublicUrl($path),
+                'public_url' => $publicUrl,
             ];
         } catch (Exception $e) {
             \Log::error('File upload error: ' . $e->getMessage());
