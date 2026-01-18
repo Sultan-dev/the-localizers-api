@@ -76,7 +76,7 @@ class CardController extends Controller
             'description' => 'nullable|string',
             'link' => 'nullable|url|max:255',
             'badge' => 'nullable|string|max:255',
-            'preview_url' => 'nullable|url|max:255',
+            'preview_url' => 'nullable|url',
             'preview_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'type' => 'required|in:government,company,all',
             'is_coming_soon' => 'boolean',
